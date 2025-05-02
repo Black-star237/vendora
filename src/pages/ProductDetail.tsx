@@ -1,8 +1,7 @@
-
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { Heart, MessageCircle, Share2, Star, ChevronRight } from "lucide-react";
+import { Heart, MessageCircle, Share2, Star, ChevronRight, Send } from "lucide-react";
 import { toast } from "sonner";
 
 import Navbar from "@/components/Navbar";
@@ -18,6 +17,8 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Textarea } from "@/components/ui/textarea";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Mock data pour démonstration
 const product = {
@@ -96,12 +97,22 @@ const relatedProducts = [
   }
 ];
 
+// Utilisateur actuel simulé
+const currentUser = {
+  name: "Utilisateur",
+  avatar: "https://i.pravatar.cc/150?img=33"
+};
+
 const ProductDetail = () => {
   const { id } = useParams();
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(product.likes);
+  const [commentText, setCommentText] = useState("");
+  const [reviews, setReviews] = useState(product.reviews);
+  const [rating, setRating] = useState(5);
+  const isMobile = useIsMobile();
   
   const handleAddToCart = () => {
     toast.success(`${quantity} ${product.name} ajouté au panier`);
@@ -119,6 +130,30 @@ const ProductDetail = () => {
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
     toast.success("Lien copié dans le presse-papier");
+  };
+  
+  const submitComment = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!commentText.trim()) {
+      toast.error("Veuillez écrire un commentaire avant de soumettre");
+      return;
+    }
+    
+    const newComment = {
+      id: `${reviews.length + 1}`,
+      user: currentUser,
+      rating: rating,
+      date: new Date().toLocaleDateString('fr-FR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      }),
+      content: commentText
+    };
+    
+    setReviews([...reviews, newComment]);
+    setCommentText("");
+    toast.success("Votre avis a été publié");
   };
 
   return (
@@ -281,7 +316,7 @@ const ProductDetail = () => {
                 value="reviews"
                 className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary bg-transparent px-4 py-2"
               >
-                Avis ({product.reviews.length})
+                Avis ({reviews.length})
               </TabsTrigger>
             </TabsList>
             
@@ -300,33 +335,90 @@ const ProductDetail = () => {
             </TabsContent>
             
             <TabsContent value="reviews" id="comments" className="pt-6">
+              {/* Add Comment Form */}
+              <div className="bg-muted/50 rounded-lg p-4 mb-6">
+                <h3 className="font-medium mb-3">Ajouter un avis</h3>
+                <form onSubmit={submitComment}>
+                  <div className="flex items-center mb-3">
+                    <p className="text-sm mr-3">Votre note:</p>
+                    <div className="flex">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          key={star}
+                          type="button"
+                          onClick={() => setRating(star)}
+                          className="focus:outline-none"
+                        >
+                          <Star 
+                            size={isMobile ? 16 : 20} 
+                            className={star <= rating ? "text-yellow-500 fill-yellow-500" : "text-gray-300"} 
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Avatar className="w-8 h-8">
+                      <AvatarImage src={currentUser.avatar} alt={currentUser.name} />
+                      <AvatarFallback>{currentUser.name.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1 relative">
+                      <Textarea
+                        placeholder="Partagez votre expérience avec ce produit..."
+                        value={commentText}
+                        onChange={(e) => setCommentText(e.target.value)}
+                        className="resize-none pr-12"
+                      />
+                      <Button 
+                        type="submit"
+                        variant="ghost"
+                        size="sm"
+                        className="absolute bottom-2 right-2 h-8 w-8 p-0 rounded-full"
+                      >
+                        <Send size={16} />
+                        <span className="sr-only">Envoyer</span>
+                      </Button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              
+              {/* Reviews List */}
               <div className="space-y-6">
-                {product.reviews.map((review) => (
-                  <div key={review.id} className="border-b pb-6">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center gap-3">
-                        <Avatar>
-                          <AvatarImage src={review.user.avatar} alt={review.user.name} />
-                          <AvatarFallback>{review.user.name.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="font-medium">{review.user.name}</p>
-                          <p className="text-sm text-muted-foreground">{review.date}</p>
+                {reviews.length > 0 ? (
+                  reviews.map((review) => (
+                    <div key={review.id} className="border-b pb-6">
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-center gap-3">
+                          <Avatar>
+                            <AvatarImage src={review.user.avatar} alt={review.user.name} />
+                            <AvatarFallback>{review.user.name.charAt(0)}</AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <p className="font-medium">{review.user.name}</p>
+                            <p className="text-sm text-muted-foreground">{review.date}</p>
+                          </div>
+                        </div>
+                        <div className="flex">
+                          {Array(5).fill(0).map((_, i) => (
+                            <Star 
+                              key={i} 
+                              size={14} 
+                              className={i < review.rating ? "text-yellow-500 fill-yellow-500" : "text-gray-300"} 
+                            />
+                          ))}
                         </div>
                       </div>
-                      <div className="flex">
-                        {Array(5).fill(0).map((_, i) => (
-                          <Star 
-                            key={i} 
-                            size={14} 
-                            className={i < review.rating ? "text-yellow-500 fill-yellow-500" : "text-gray-300"} 
-                          />
-                        ))}
-                      </div>
+                      <p className="mt-2 text-muted-foreground">{review.content}</p>
                     </div>
-                    <p className="mt-2 text-muted-foreground">{review.content}</p>
+                  ))
+                ) : (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <MessageCircle className="mx-auto h-12 w-12 opacity-30 mb-2" />
+                    <p>Aucun avis pour ce produit pour le moment.</p>
+                    <p className="text-sm">Soyez le premier à donner votre avis !</p>
                   </div>
-                ))}
+                )}
               </div>
             </TabsContent>
           </Tabs>

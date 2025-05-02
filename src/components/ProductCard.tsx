@@ -1,4 +1,3 @@
-
 import { Heart, MessageCircle, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -10,7 +9,7 @@ interface ProductCardProps {
   id: string;
   name: string;
   price: number;
-  image: string;
+  image?: string;
   shop: {
     name: string;
     id: string;
@@ -23,6 +22,10 @@ const ProductCard = ({ id, name, price, image, shop, likes: initialLikes, commen
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(initialLikes);
   const isMobile = useIsMobile();
+  
+  // Image par défaut si aucune n'est fournie
+  const defaultImage = "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=800&auto=format&fit=crop";
+  const productImage = image || defaultImage;
 
   const toggleLike = () => {
     if (liked) {
@@ -44,7 +47,7 @@ const ProductCard = ({ id, name, price, image, shop, likes: initialLikes, commen
       <Link to={`/products/${id}`} className="block">
         <div className="aspect-square overflow-hidden">
           <img 
-            src={image} 
+            src={productImage} 
             alt={name} 
             className="h-full w-full object-cover transition-all hover:scale-105"
           />
