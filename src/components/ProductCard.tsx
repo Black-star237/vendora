@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ProductCardProps {
   id: string;
@@ -21,6 +22,7 @@ interface ProductCardProps {
 const ProductCard = ({ id, name, price, image, shop, likes: initialLikes, comments }: ProductCardProps) => {
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(initialLikes);
+  const isMobile = useIsMobile();
 
   const toggleLike = () => {
     if (liked) {
@@ -49,51 +51,51 @@ const ProductCard = ({ id, name, price, image, shop, likes: initialLikes, commen
         </div>
       </Link>
       
-      <div className="p-4">
+      <div className="p-3 sm:p-4">
         <div className="mb-2 flex items-start justify-between">
-          <div>
-            <h3 className="font-medium line-clamp-1">
+          <div className="max-w-[70%]">
+            <h3 className="font-medium line-clamp-1 text-sm sm:text-base">
               <Link to={`/products/${id}`}>{name}</Link>
             </h3>
             <Link 
               to={`/shops/${shop.id}`}
-              className="text-sm text-muted-foreground hover:underline"
+              className="text-xs sm:text-sm text-muted-foreground hover:underline line-clamp-1"
             >
               {shop.name}
             </Link>
           </div>
-          <p className="font-semibold">{price.toFixed(2)} €</p>
+          <p className="font-semibold text-sm sm:text-base">{price.toFixed(2)} €</p>
         </div>
         
-        <div className="flex items-center justify-between border-t mt-2 pt-2">
+        <div className="flex items-center justify-between border-t mt-1 pt-1 sm:mt-2 sm:pt-2">
           <Button 
             variant="ghost" 
             size="sm" 
-            className="h-8 px-2 text-muted-foreground"
+            className="h-7 sm:h-8 px-1 sm:px-2 text-muted-foreground"
             onClick={toggleLike}
           >
-            <Heart size={16} className={liked ? "fill-rose-500 text-rose-500" : ""} />
-            <span className="ml-1">{likes}</span>
+            <Heart size={isMobile ? 14 : 16} className={liked ? "fill-rose-500 text-rose-500" : ""} />
+            <span className="ml-1 text-xs sm:text-sm">{likes}</span>
           </Button>
           
           <Link to={`/products/${id}#comments`}>
             <Button 
               variant="ghost" 
               size="sm" 
-              className="h-8 px-2 text-muted-foreground"
+              className="h-7 sm:h-8 px-1 sm:px-2 text-muted-foreground"
             >
-              <MessageCircle size={16} />
-              <span className="ml-1">{comments}</span>
+              <MessageCircle size={isMobile ? 14 : 16} />
+              <span className="ml-1 text-xs sm:text-sm">{comments}</span>
             </Button>
           </Link>
           
           <Button 
             variant="ghost" 
             size="sm" 
-            className="h-8 px-2 text-muted-foreground"
+            className="h-7 sm:h-8 px-1 sm:px-2 text-muted-foreground"
             onClick={handleShare}
           >
-            <Share2 size={16} />
+            <Share2 size={isMobile ? 14 : 16} />
           </Button>
         </div>
       </div>
