@@ -1,4 +1,5 @@
 
+import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -14,30 +15,36 @@ import Shops from "./pages/Shops";
 import Account from "./pages/Account";
 import Cart from "./pages/Cart";
 
+// Create a query client instance outside of the component
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/products/:id" element={<ProductDetail />} />
-          <Route path="/shops/:id" element={<ShopDetail />} />
-          <Route path="/category/:name" element={<CategoryPage />} />
-          <Route path="/explore" element={<Explore />} />
-          <Route path="/shops" element={<Shops />} />
-          <Route path="/account" element={<Account />} />
-          <Route path="/cart" element={<Cart />} />
-          {/* Route pour la page de création de boutique à implémenter plus tard */}
-          {/* <Route path="/create-shop" element={<CreateShop />} /> */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+// Make App a proper React component function
+const App = () => {
+  return (
+    <React.StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/products/:id" element={<ProductDetail />} />
+              <Route path="/shops/:id" element={<ShopDetail />} />
+              <Route path="/category/:name" element={<CategoryPage />} />
+              <Route path="/explore" element={<Explore />} />
+              <Route path="/shops" element={<Shops />} />
+              <Route path="/account" element={<Account />} />
+              <Route path="/cart" element={<Cart />} />
+              {/* Route pour la page de création de boutique à implémenter plus tard */}
+              {/* <Route path="/create-shop" element={<CreateShop />} /> */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </React.StrictMode>
+  );
+};
 
 export default App;
