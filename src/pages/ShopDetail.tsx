@@ -182,19 +182,23 @@ const ShopDetail = () => {
           <Breadcrumb className="mb-6">
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink as={Link} to="/">Accueil</BreadcrumbLink>
+                <BreadcrumbLink asChild>
+                  <Link to="/">Accueil</Link>
+                </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator>
                 <ChevronRight size={16} />
               </BreadcrumbSeparator>
               <BreadcrumbItem>
-                <BreadcrumbLink as={Link} to="/shops">Boutiques</BreadcrumbLink>
+                <BreadcrumbLink asChild>
+                  <Link to="/shops">Boutiques</Link>
+                </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator>
                 <ChevronRight size={16} />
               </BreadcrumbSeparator>
               <BreadcrumbItem>
-                <BreadcrumbLink aria-current="page">{shop.name}</BreadcrumbLink>
+                <BreadcrumbLink>{shop.name}</BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>

@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ChevronRight, Search, Filter, Grid3X3, LayoutList } from "lucide-react";
+import { ChevronRight, Search, Filter, Grid3X3, LayoutList, Heart, MessageCircle } from "lucide-react";
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -236,19 +236,23 @@ const CategoryPage = () => {
           <Breadcrumb className="mb-6">
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink as={Link} to="/">Accueil</BreadcrumbLink>
+                <BreadcrumbLink asChild>
+                  <Link to="/">Accueil</Link>
+                </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator>
                 <ChevronRight size={16} />
               </BreadcrumbSeparator>
               <BreadcrumbItem>
-                <BreadcrumbLink as={Link} to="/explore">Catégories</BreadcrumbLink>
+                <BreadcrumbLink asChild>
+                  <Link to="/explore">Catégories</Link>
+                </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator>
                 <ChevronRight size={16} />
               </BreadcrumbSeparator>
               <BreadcrumbItem>
-                <BreadcrumbLink aria-current="page">{categoryData.name}</BreadcrumbLink>
+                <BreadcrumbLink>{categoryData.name}</BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>

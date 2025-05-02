@@ -131,21 +131,25 @@ const ProductDetail = () => {
           <Breadcrumb className="mb-6">
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink as={Link} to="/">Accueil</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator>
-                <ChevronRight size={16} />
-              </BreadcrumbSeparator>
-              <BreadcrumbItem>
-                <BreadcrumbLink as={Link} to={`/category/${product.category.toLowerCase()}`}>
-                  {product.category}
+                <BreadcrumbLink asChild>
+                  <Link to="/">Accueil</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator>
                 <ChevronRight size={16} />
               </BreadcrumbSeparator>
               <BreadcrumbItem>
-                <BreadcrumbLink aria-current="page">{product.name}</BreadcrumbLink>
+                <BreadcrumbLink asChild>
+                  <Link to={`/category/${product.category.toLowerCase()}`}>
+                    {product.category}
+                  </Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator>
+                <ChevronRight size={16} />
+              </BreadcrumbSeparator>
+              <BreadcrumbItem>
+                <BreadcrumbLink>{product.name}</BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
