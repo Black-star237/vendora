@@ -14,6 +14,7 @@ import Explore from "./pages/Explore";
 import Shops from "./pages/Shops";
 import Account from "./pages/Account";
 import Cart from "./pages/Cart";
+import CreateShop from "./pages/CreateShop";
 
 // Create a query client instance outside of the component
 const queryClient = new QueryClient();
@@ -36,8 +37,7 @@ const App = () => {
               <Route path="/shops" element={<Shops />} />
               <Route path="/account" element={<Account />} />
               <Route path="/cart" element={<Cart />} />
-              {/* Route pour la page de création de boutique à implémenter plus tard */}
-              {/* <Route path="/create-shop" element={<CreateShop />} /> */}
+              <Route path="/create-shop" element={<CreateShop />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
